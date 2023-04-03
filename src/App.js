@@ -1,93 +1,83 @@
 import { useState } from "react"
 
-function MyButton() {
+function Square({ value, onSquareClick }) {
+  // const [value, setValue] = useState(null)
+
+  // function handleClick () {
+  //   setValue('X')
+  // }
+
   return (
-    <button>I am a button</button>
+    <button className="square" onClick={ onSquareClick }>
+      { value }
+    </button>
   )
 }
 
-function AboutPage() {
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null))
+  const [xTurn, setXTurn] = useState(true)
+
+  function handleClick(index) {
+    if (squares[index] || calculateWinner(squares)) {
+      return;
+    }
+    const copiedSquare = squares.slice()
+    if (xTurn) {
+      copiedSquare[index] = 'X'
+    } else {
+      copiedSquare[index] = 'O'
+    }
+    setSquares(copiedSquare)
+    setXTurn(!xTurn)
+  }
+
+  function calculateWinner(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+    return null;
+  }
+
+  const winner = calculateWinner(squares)
+  let status
+  if (winner) {
+    status = 'Winner: ' + winner
+  } else {
+    status = 'Next player: ' + (xTurn ? 'X' : 'O')
+  }
+
   return (
     <>
-      <h1>About</h1>
-      <p>Hello there <br />How do you do ?</p>
+      <div className="status">{ status }</div>
+      <div className="board-row">
+        <Square value={ squares[0] } onSquareClick={ () => handleClick(0) }/>
+        <Square value={ squares[1] } onSquareClick={ () => handleClick(1) }/>
+        <Square value={ squares[2] } onSquareClick={ () => handleClick(2) }/>
+      </div>
+      <div className="board-row">
+        <Square value={ squares[3] } onSquareClick={ () => handleClick(3) }/>
+        <Square value={ squares[4] } onSquareClick={ () => handleClick(4) }/>
+        <Square value={ squares[5] } onSquareClick={ () => handleClick(5) }/>
+      </div>
+      <div className="board-row">
+        <Square value={ squares[6] } onSquareClick={ () => handleClick(6) }/>
+        <Square value={ squares[7] } onSquareClick={ () => handleClick(7) }/>
+        <Square value={ squares[8] } onSquareClick={ () => handleClick(8) }/>
+      </div>
     </>
-  )
-}
-
-const user = {
-  name: 'Hedy Lamarr',
-  imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 90
-}
-
-const products = [
-  { title: 'Cabbage', isFruit: false, id: 1 },
-  { title: 'Garlic', isFruit: false, id: 2 },
-  { title: 'Apple', isFruit: true, id: 3 }
-]
-
-function ShoppingList() {
-  const listItems = products.map(p =>
-    <li key={p.id} style={{ color: p.isFruit ? 'magenta' : 'darkgreen'}}>
-      {p.title}
-    </li>
-  )
-
-  return (
-    <ul>{listItems}</ul>
-  )
-}
-
-function ClickableButton() {
-  const [count, setCount] = useState(0)
-
-  function handleClick() {
-    setCount(count + 1)
-  }
-
-  return (
-    <button onClick={handleClick}>
-      Click {count} times
-    </button>
-  )
-}
-
-function ShareStateButton({count, onClick}) {
-  return (
-    <button onClick={onClick}>
-      Click {count} times
-    </button>
-  )
-}
-
-export default function MyApp() {
-  const [count, setCount] = useState(0)
-
-  function handleClick() {
-    setCount(count + 1)
-  }
-
-  return (
-    <div>
-      <h1>{user.name}</h1>
-      <img
-        className="avatar"
-        src={user.imageUrl}
-        alt={'Photo of ' + user.name}
-        style={{
-          width: user.imageSize,
-          height: user.imageSize
-        }}
-      />
-      <ShoppingList />
-      <h1>ClickableButton</h1>
-      <ClickableButton />
-      <ClickableButton />
-      <h1>ShareStateButton</h1>
-      <ShareStateButton count={count} onClick={handleClick} />
-      <br />
-      <ShareStateButton count={count} onClick={handleClick} />
-    </div>
   )
 }
