@@ -1,12 +1,11 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
-
-import App from "./App";
+import TodoApp from "components/TodoApp";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
-    <App />
+    <TodoApp />
   </StrictMode>
 );
