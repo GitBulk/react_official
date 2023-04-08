@@ -7,7 +7,7 @@
   "devDependencies": {
     "react-scripts": "^5.0.1"
   },
-  "name": "tic-tac-toe",
+  "name": "evondev-project",
   "description": "kaka learn react",
   "version": "0.0.0",
   "scripts": {
